@@ -1,0 +1,940 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>短信服务器接口文档</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<style type="text/css">
+/* GitHub stylesheet for MarkdownPad (http://markdownpad.com) */
+/* Author: Nicolas Hery - http://nicolashery.com */
+/* Version: b13fe65ca28d2e568c6ed5d7f06581183df8f2ff */
+/* Source: https://github.com/nicolahery/markdownpad-github */
+
+/* RESET
+=============================================================================*/
+
+html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, abbr, acronym, address, big, cite, code, del, dfn, em, img, ins, kbd, q, s, samp, small, strike, strong, sub, sup, tt, var, b, u, i, center, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td, article, aside, canvas, details, embed, figure, figcaption, footer, header, hgroup, menu, nav, output, ruby, section, summary, time, mark, audio, video {
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+/* BODY
+=============================================================================*/
+
+body {
+  font-family: Helvetica, arial, freesans, clean, sans-serif;
+  font-size: 14px;
+  line-height: 1.6;
+  color: #333;
+  background-color: #fff;
+  padding: 20px;
+  max-width: 960px;
+  margin: 0 auto;
+}
+
+body>*:first-child {
+  margin-top: 0 !important;
+}
+
+body>*:last-child {
+  margin-bottom: 0 !important;
+}
+
+/* BLOCKS
+=============================================================================*/
+
+p, blockquote, ul, ol, dl, table, pre {
+  margin: 15px 0;
+}
+
+/* HEADERS
+=============================================================================*/
+
+h1, h2, h3, h4, h5, h6 {
+  margin: 20px 0 10px;
+  padding: 0;
+  font-weight: bold;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1 tt, h1 code, h2 tt, h2 code, h3 tt, h3 code, h4 tt, h4 code, h5 tt, h5 code, h6 tt, h6 code {
+  font-size: inherit;
+}
+
+h1 {
+  font-size: 28px;
+  color: #000;
+}
+
+h2 {
+  font-size: 24px;
+  border-bottom: 1px solid #ccc;
+  color: #000;
+}
+
+h3 {
+  font-size: 18px;
+}
+
+h4 {
+  font-size: 16px;
+}
+
+h5 {
+  font-size: 14px;
+}
+
+h6 {
+  color: #777;
+  font-size: 14px;
+}
+
+body>h2:first-child, body>h1:first-child, body>h1:first-child+h2, body>h3:first-child, body>h4:first-child, body>h5:first-child, body>h6:first-child {
+  margin-top: 0;
+  padding-top: 0;
+}
+
+a:first-child h1, a:first-child h2, a:first-child h3, a:first-child h4, a:first-child h5, a:first-child h6 {
+  margin-top: 0;
+  padding-top: 0;
+}
+
+h1+p, h2+p, h3+p, h4+p, h5+p, h6+p {
+  margin-top: 10px;
+}
+
+/* LINKS
+=============================================================================*/
+
+a {
+  color: #4183C4;
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+/* LISTS
+=============================================================================*/
+
+ul, ol {
+  padding-left: 30px;
+}
+
+ul li > :first-child, 
+ol li > :first-child, 
+ul li ul:first-of-type, 
+ol li ol:first-of-type, 
+ul li ol:first-of-type, 
+ol li ul:first-of-type {
+  margin-top: 0px;
+}
+
+ul ul, ul ol, ol ol, ol ul {
+  margin-bottom: 0;
+}
+
+dl {
+  padding: 0;
+}
+
+dl dt {
+  font-size: 14px;
+  font-weight: bold;
+  font-style: italic;
+  padding: 0;
+  margin: 15px 0 5px;
+}
+
+dl dt:first-child {
+  padding: 0;
+}
+
+dl dt>:first-child {
+  margin-top: 0px;
+}
+
+dl dt>:last-child {
+  margin-bottom: 0px;
+}
+
+dl dd {
+  margin: 0 0 15px;
+  padding: 0 15px;
+}
+
+dl dd>:first-child {
+  margin-top: 0px;
+}
+
+dl dd>:last-child {
+  margin-bottom: 0px;
+}
+
+/* CODE
+=============================================================================*/
+
+pre, code, tt {
+  font-size: 12px;
+  font-family: Consolas, "Liberation Mono", Courier, monospace;
+}
+
+code, tt {
+  margin: 0 0px;
+  padding: 0px 0px;
+  white-space: nowrap;
+  border: 1px solid #eaeaea;
+  background-color: #f8f8f8;
+  border-radius: 3px;
+}
+
+pre>code {
+  margin: 0;
+  padding: 0;
+  white-space: pre;
+  border: none;
+  background: transparent;
+}
+
+pre {
+  background-color: #f8f8f8;
+  border: 1px solid #ccc;
+  font-size: 13px;
+  line-height: 19px;
+  overflow: auto;
+  padding: 6px 10px;
+  border-radius: 3px;
+}
+
+pre code, pre tt {
+  background-color: transparent;
+  border: none;
+}
+
+kbd {
+    -moz-border-bottom-colors: none;
+    -moz-border-left-colors: none;
+    -moz-border-right-colors: none;
+    -moz-border-top-colors: none;
+    background-color: #DDDDDD;
+    background-image: linear-gradient(#F1F1F1, #DDDDDD);
+    background-repeat: repeat-x;
+    border-color: #DDDDDD #CCCCCC #CCCCCC #DDDDDD;
+    border-image: none;
+    border-radius: 2px 2px 2px 2px;
+    border-style: solid;
+    border-width: 1px;
+    font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+    line-height: 10px;
+    padding: 1px 4px;
+}
+
+/* QUOTES
+=============================================================================*/
+
+blockquote {
+  border-left: 4px solid #DDD;
+  padding: 0 15px;
+  color: #777;
+}
+
+blockquote>:first-child {
+  margin-top: 0px;
+}
+
+blockquote>:last-child {
+  margin-bottom: 0px;
+}
+
+/* HORIZONTAL RULES
+=============================================================================*/
+
+hr {
+  clear: both;
+  margin: 15px 0;
+  height: 0px;
+  overflow: hidden;
+  border: none;
+  background: transparent;
+  border-bottom: 4px solid #ddd;
+  padding: 0;
+}
+
+/* TABLES
+=============================================================================*/
+
+table th {
+  font-weight: bold;
+}
+
+table th, table td {
+  border: 1px solid #ccc;
+  padding: 6px 13px;
+}
+
+table tr {
+  border-top: 1px solid #ccc;
+  background-color: #fff;
+}
+
+table tr:nth-child(2n) {
+  background-color: #f8f8f8;
+}
+
+/* IMAGES
+=============================================================================*/
+
+img {
+  max-width: 100%
+}
+</style>
+</head>
+<body>
+<p><font color=#333333 size=5 face="微软雅黑" >短信服务器接口文档</font></p>
+<p><br>
+<br>
+<font color=#0099ff size=5 face="微软雅黑" >使用说明</font></p>
+<blockquote>
+<p>请求地址：<strong>http://host:port/serviceName</strong></p>
+<p>本服务为局域网络网络服务，请求方式为http的GET请求暂不支持POST及其他类型的请求</p>
+<p>服务的IP地址请在APP启动后，图形界面中获取</p>
+<p>请求中的host和port均可在APP启动后获取得到，service请参考常用的服务和名称列表</p>
+<p>请在第一次安装APP时测试短信权限，避免无法发送</p>
+<p>请在第一次使用时设置本机号码、接收服务的IP和端口信息</p>
+</blockquote>
+<p><img src="https://github.com/benchegnzhou/imagerepository/raw/master/androidImg/image_000311.png" /></p>
+<p><img src="https://github.com/benchegnzhou/imagerepository/raw/master/androidImg/image_000312.png" /></p>
+<p><img src="https://github.com/benchegnzhou/imagerepository/raw/master/androidImg/image_000313.png" /></p>
+<p><img src="https://github.com/benchegnzhou/imagerepository/raw/master/androidImg/image_000314.png" /></p>
+<p><br>
+<br>
+<font color=#0099ff size=5 face="微软雅黑" >支持的服务预览</font></p>
+<table>
+<thead>
+<tr>
+	<th>服务名称</th>
+	<th>服务描述</th>
+	<th>请求方式</th>
+	<th>备注</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+	<td>serviceSendMsg</td>
+	<td>发送实时短消息</td>
+	<td>GET</td>
+	<td>无</td>
+</tr>
+<tr>
+	<td>ServiceSendDelayMsg</td>
+	<td>发送延时短消息</td>
+	<td>GET</td>
+	<td>无</td>
+</tr>
+<tr>
+	<td>serviceQuarySendMsgHistory</td>
+	<td>查询最近的短消息记录，默认存储最近三个月内的信息</td>
+	<td>GET</td>
+	<td>无</td>
+</tr>
+<tr>
+	<td>serviceQuaryTransponDrecord</td>
+	<td>查询最近的短消息转发记录，记录默认保存6个月</td>
+	<td>GET</td>
+	<td>无</td>
+</tr>
+</tbody>
+</table>
+<p><br>
+<br>
+<font color=#0099ff size=4 face="微软雅黑" >1. 短信实时发送接口</font></p>
+<blockquote>
+<p><strong>服务名称：serviceSendMsg</strong></p>
+</blockquote>
+<p>完整服务实例：</p>
+<p><strong>http://192.168.1.103:8090/serviceSendMsg?phoneNumber=13212345689,13612345678&amp;msgContent=液位报警&amp;msgType=000001&amp;msgName=液位报警</strong></p>
+<p>上面的短信息完成完成了一个及时短信息的发送，其中<code>192.168.1.103:8090</code> 是在APP启动后，屏幕中获取到的；phoneNumber后面传输手机号，多个手机号请用逗号分隔；msgContent是短信的信息体，支持多文字（注：不同运营商对文字的长度规定不同，短信的信息体过长时，文本将会被分成多条发送，例如要150字短信，以移动运营商为例，将会分为两条70字和一条10字的短信），为节省开支，请尽量将短信控制在70字符内，标点将视为一个字符。</p>
+<blockquote>
+<p><strong>服务请求参数：</strong></p>
+</blockquote>
+<table>
+<thead>
+<tr>
+	<th>参数名称</th>
+	<th>作用</th>
+	<th>是否必传</th>
+	<th>参数长度限制</th>
+	<th>默认参数</th>
+	<th>备注</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+	<td>phoneNumber</td>
+	<td>需要发送的目标对象的手机号（目前仅支持11大陆移动、联通、电信手机用户）</td>
+	<td>是</td>
+	<td>不限长度</td>
+	<td>无</td>
+	<td>多手机号请使用逗号分隔</td>
+</tr>
+<tr>
+	<td>msgContent</td>
+	<td>短信的信息体</td>
+	<td>是</td>
+	<td>不限长度</td>
+	<td>无</td>
+	<td>长度过长的短信将会被运营商拆分成70字符每条的若干条短信</td>
+</tr>
+<tr>
+	<td>msgType</td>
+	<td>信息类别代码</td>
+	<td>否</td>
+	<td>15字符内</td>
+	<td>null</td>
+	<td></td>
+</tr>
+<tr>
+	<td>msgName</td>
+	<td>信息类别名称</td>
+	<td>否</td>
+	<td>15字符内</td>
+	<td>其他</td>
+	<td></td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>服务返回参数：</strong></p>
+</blockquote>
+<table>
+<thead>
+<tr>
+	<th>参数名称</th>
+	<th>作用</th>
+	<th>参数类型</th>
+	<th>参数取值及其含义</th>
+	<th>备注</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+	<td>code</td>
+	<td>请求结果返回码</td>
+	<td>int</td>
+	<td>200：成功;500：失败；800：请求服务器不支持的请求方式；900：服务不支持或不存在</td>
+	<td></td>
+</tr>
+<tr>
+	<td>msg</td>
+	<td>请求的结果信息说明</td>
+	<td>String</td>
+	<td>便于排查错误</td>
+	<td>&nbsp;</td>
+</tr>
+<tr>
+	<td>time</td>
+	<td>服务器处理当前请求的时间</td>
+	<td>String</td>
+	<td>返回一个 2019年01月12日 12:12:12 格式的时间串</td>
+	<td>&nbsp;</td>
+</tr>
+<tr>
+	<td>phoneNumber</td>
+	<td>需要发送的目标对象的手机号</td>
+	<td>String</td>
+	<td>13212345687</td>
+	<td>&nbsp;</td>
+</tr>
+<tr>
+	<td>msgContent</td>
+	<td>短信的信息体</td>
+	<td>String</td>
+	<td>短信的信息体</td>
+	<td>&nbsp;</td>
+</tr>
+<tr>
+	<td>msgType</td>
+	<td>信息类别代码</td>
+	<td>String</td>
+	<td>类别代码</td>
+	<td>&nbsp;</td>
+</tr>
+<tr>
+	<td>msgName</td>
+	<td>信息类别名称</td>
+	<td>String</td>
+	<td>类别名称</td>
+	<td>&nbsp;</td>
+</tr>
+</tbody>
+</table>
+<pre><code>{
+    &quot;code&quot;: 200,
+    &quot;content&quot;: &quot;这里可以发送报警信息哦&quot;,
+    &quot;msg&quot;: &quot;短信发送成功&quot;,
+    &quot;phoneNumber&quot;: &quot;13621114221&quot;,
+    &quot;time&quot;: &quot;2019年07月14日 18:30:48&quot;
+}
+</code></pre>
+
+<p><br>
+<br>
+<font color=#0099ff size=4 face="微软雅黑" >2. 延时发送短信发送接口</font></p>
+<blockquote>
+<p><strong>服务名称：ServiceSendDelayMsg</strong></p>
+</blockquote>
+<p>完整服务实例：</p>
+<p><strong>http://192.168.1.103:8090/ServiceSendDelayMsg?phoneNumber=13212345689,13612345678&amp;msgContent=液位报警&amp;msgDelayTimems=1000&amp;msgType=000001&amp;msgName=液位报警</strong></p>
+<blockquote>
+<p><strong>服务请求参数：</strong></p>
+</blockquote>
+<table>
+<thead>
+<tr>
+	<th>参数名称</th>
+	<th>作用</th>
+	<th>是否必传</th>
+	<th>参数长度限制</th>
+	<th>默认参数</th>
+	<th>备注</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+	<td>phoneNumber</td>
+	<td>需要发送的目标对象的手机号（目前仅支持11大陆移动、联通、电信手机用户）</td>
+	<td>是</td>
+	<td>不限长度</td>
+	<td>无</td>
+	<td>多手机号请使用逗号分隔</td>
+</tr>
+<tr>
+	<td>msgContent</td>
+	<td>短信的信息体</td>
+	<td>是</td>
+	<td>不限长度</td>
+	<td>无</td>
+	<td>长度过长的短信将会被运营商拆分成70字符每条的若干条短信</td>
+</tr>
+<tr>
+	<td>msgDelayTimems</td>
+	<td>延时发送短消息，单位毫秒</td>
+	<td>否</td>
+	<td>不超过long取值范围</td>
+	<td>默认为0，立即发送</td>
+	<td>为节约资源，系统每6s定时循环查找需要发送的讯息，所以可能存在最大误差为6s；msgDelayTimems的值为0或者补传默认发送及时短讯息</td>
+</tr>
+<tr>
+	<td>msgType</td>
+	<td>信息类别代码</td>
+	<td>否</td>
+	<td>15字符内</td>
+	<td>null</td>
+	<td></td>
+</tr>
+<tr>
+	<td>msgName</td>
+	<td>信息类别名称</td>
+	<td>否</td>
+	<td>15字符内</td>
+	<td>其他</td>
+	<td></td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>服务返回参数：</strong></p>
+</blockquote>
+<table>
+<thead>
+<tr>
+	<th>参数名称</th>
+	<th>作用</th>
+	<th>参数类型</th>
+	<th>参数取值及其含义</th>
+	<th>备注</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+	<td>code</td>
+	<td>请求结果返回码</td>
+	<td>int</td>
+	<td>200：成功;500：失败；800：请求服务器不支持的请求方式；900：服务不支持或不存在</td>
+	<td></td>
+</tr>
+<tr>
+	<td>msg</td>
+	<td>请求的结果信息说明</td>
+	<td>String</td>
+	<td>便于排查错误</td>
+	<td>&nbsp;</td>
+</tr>
+<tr>
+	<td>time</td>
+	<td>服务器处理当前请求的时间</td>
+	<td>String</td>
+	<td>返回一个 2019年01月12日 12:12:12 格式的时间串</td>
+	<td>&nbsp;</td>
+</tr>
+<tr>
+	<td>phoneNumber</td>
+	<td>需要发送的目标对象的手机号</td>
+	<td>String</td>
+	<td>13212345687</td>
+	<td>&nbsp;</td>
+</tr>
+<tr>
+	<td>msgContent</td>
+	<td>短信的信息体</td>
+	<td>String</td>
+	<td>短信的信息体</td>
+	<td>&nbsp;</td>
+</tr>
+<tr>
+	<td>msgType</td>
+	<td>信息类别代码</td>
+	<td>String</td>
+	<td>类别代码</td>
+	<td>&nbsp;</td>
+</tr>
+<tr>
+	<td>msgName</td>
+	<td>信息类别名称</td>
+	<td>String</td>
+	<td>类别名称</td>
+	<td>&nbsp;</td>
+</tr>
+</tbody>
+</table>
+<p><br>
+<br>
+<font color=#0099ff size=4 face="微软雅黑" > 3. 历史短消息查询接口</font></p>
+<blockquote>
+<p><strong>服务名称：serviceQuarySendMsgHistory</strong></p>
+</blockquote>
+<p>完整服务实例：</p>
+<p><strong>http://192.168.1.103:8090/serviceQuarySendMsgHistory</strong></p>
+<blockquote>
+<p><strong>请求方式</strong></p>
+</blockquote>
+<p><strong>GET请求</strong></p>
+<blockquote>
+<p><strong>服务请求参数：</strong></p>
+</blockquote>
+<table>
+<thead>
+<tr>
+	<th>参数名称</th>
+	<th>作用</th>
+	<th>是否必传</th>
+	<th>参数长度限制</th>
+	<th>默认参数</th>
+	<th>备注</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+	<td></td>
+	<td></td>
+	<td></td>
+	<td></td>
+	<td>&nbsp;</td>
+	<td>&nbsp;</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>服务返回参数：</strong></p>
+</blockquote>
+<table>
+<thead>
+<tr>
+	<th>参数名称</th>
+	<th>作用</th>
+	<th>参数类型</th>
+	<th>参数取值及其含义</th>
+	<th>备注</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+	<td>code</td>
+	<td>请求结果返回码</td>
+	<td>int</td>
+	<td>200：成功;500：失败；800：请求服务器不支持的请求方式；900：服务不支持或不存在</td>
+	<td></td>
+</tr>
+<tr>
+	<td>msg</td>
+	<td>请求的结果信息说明</td>
+	<td>String</td>
+	<td>便于排查错误</td>
+	<td>&nbsp;</td>
+</tr>
+<tr>
+	<td>msgList</td>
+	<td>信息体列表</td>
+	<td>MsgListBean</td>
+	<td>短信信息体列表</td>
+	<td>&nbsp;</td>
+</tr>
+<tr>
+	<td>msgId</td>
+	<td>短信id</td>
+	<td>String</td>
+	<td>短信息的唯一识别标识</td>
+	<td>&nbsp;</td>
+</tr>
+<tr>
+	<td>phoneNumber</td>
+	<td>需要发送的目标对象的手机号</td>
+	<td>String</td>
+	<td>13212345687</td>
+	<td>&nbsp;</td>
+</tr>
+<tr>
+	<td>msgContent</td>
+	<td>短信的的信息体</td>
+	<td>String</td>
+	<td></td>
+	<td>&nbsp;</td>
+</tr>
+<tr>
+	<td>msgCreateTime</td>
+	<td>短讯息的创建时间</td>
+	<td>String</td>
+	<td>返回一个 2019年01月12日 12:12:12 格式的时间串</td>
+	<td>&nbsp;</td>
+</tr>
+<tr>
+	<td>msgType</td>
+	<td>信息类别代码</td>
+	<td>String</td>
+	<td>类别代码</td>
+	<td>&nbsp;</td>
+</tr>
+<tr>
+	<td>msgName</td>
+	<td>信息类别名称</td>
+	<td>String</td>
+	<td>类别名称</td>
+	<td>&nbsp;</td>
+</tr>
+<tr>
+	<td>msgSendTime</td>
+	<td>消息送达时间</td>
+	<td>String</td>
+	<td>单位ms</td>
+	<td>&nbsp;</td>
+</tr>
+<tr>
+	<td>sendTime</td>
+	<td>短讯息的实际发送时间</td>
+	<td>String</td>
+	<td>返回一个 2019年01月12日 12:12:12 格式的时间串</td>
+	<td>&nbsp;</td>
+</tr>
+<tr>
+	<td>retrtyTimeMs</td>
+	<td>下一次重试的时间</td>
+	<td>long</td>
+	<td></td>
+	<td>&nbsp;</td>
+</tr>
+<tr>
+	<td>toBeSendTime</td>
+	<td>计划发送时间</td>
+	<td>String</td>
+	<td>返回一个 2019年01月12日 12:12:12 格式的时间串</td>
+	<td>&nbsp;</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>返回举例</strong></p>
+</blockquote>
+<pre><code>{
+    &quot;code&quot;: 200,
+    &quot;msg&quot;: &quot;数据请求成功&quot;,
+    &quot;msgList&quot;: [
+        {
+            &quot;msgContent&quot;: &quot;有几个地方可以放置插件的源代码。&quot;,
+            &quot;msgCreateTime&quot;: &quot;2019年07月14日 08:15:03&quot;,
+            &quot;msgId&quot;: &quot;1563106503802&quot;,
+            &quot;msgNumber&quot;: &quot;13621114221&quot;,
+            &quot;msgSendTime&quot;: &quot;2019年07月14日 08:15:03&quot;,
+            &quot;msgStatus&quot;: 0,
+            &quot;retrtyTimeMs&quot;: 0,
+            &quot;toBeSendTime&quot;: &quot;2019年07月14日 08:15:03&quot;
+        },
+        {
+            &quot;msgContent&quot;: &quot;这里可以发送报警信息哦&quot;,
+            &quot;msgCreateTime&quot;: &quot;2019年07月14日 06:30:48&quot;,
+            &quot;msgId&quot;: &quot;1563100248117&quot;,
+            &quot;msgNumber&quot;: &quot;13621114221&quot;,
+            &quot;msgSendTime&quot;: &quot;2019年07月14日 06:30:48&quot;,
+            &quot;msgStatus&quot;: 0,
+            &quot;retrtyTimeMs&quot;: 0,
+            &quot;toBeSendTime&quot;: &quot;2019年07月14日 06:30:48&quot;
+        }
+    ]
+}
+</code></pre>
+
+<p><br>
+<br>
+<font color=#0099ff size=4 face="微软雅黑" > 4. 历史短信转发记录</font></p>
+<blockquote>
+<p><strong>服务名称：serviceQuaryTransponDrecord</strong></p>
+</blockquote>
+<p>完整服务实例：</p>
+<p><strong>http://192.168.1.103:8090/serviceQuaryTransponDrecord</strong></p>
+<blockquote>
+<p><strong>请求方式</strong></p>
+</blockquote>
+<ul>
+<li><strong>get请求</strong></li>
+</ul>
+<blockquote>
+<p><strong>服务请求参数：</strong></p>
+</blockquote>
+<table>
+<thead>
+<tr>
+	<th>参数名称</th>
+	<th>作用</th>
+	<th>是否必传</th>
+	<th>参数长度限制</th>
+	<th>默认参数</th>
+	<th>备注</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+	<td></td>
+	<td></td>
+	<td></td>
+	<td></td>
+	<td>&nbsp;</td>
+	<td>&nbsp;</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>服务返回参数：</strong></p>
+</blockquote>
+<table>
+<thead>
+<tr>
+	<th>参数名称</th>
+	<th>作用</th>
+	<th>参数类型</th>
+	<th>参数取值及其含义</th>
+	<th>备注</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+	<td>code</td>
+	<td>请求结果返回码</td>
+	<td>int</td>
+	<td>200：成功;500：失败；800：请求服务器不支持的请求方式；900：服务不支持或不存在</td>
+	<td></td>
+</tr>
+<tr>
+	<td>msg</td>
+	<td>请求的结果信息说明</td>
+	<td>String</td>
+	<td>便于排查错误</td>
+	<td>&nbsp;</td>
+</tr>
+<tr>
+	<td>msgList</td>
+	<td>信息体列表</td>
+	<td>MsgListBean</td>
+	<td>短信信息体列表</td>
+	<td>&nbsp;</td>
+</tr>
+<tr>
+	<td>msgId</td>
+	<td>短信id</td>
+	<td>String</td>
+	<td>短信息的唯一识别标识</td>
+	<td>&nbsp;</td>
+</tr>
+<tr>
+	<td>msgFrom</td>
+	<td>创建短讯息对象的手机号</td>
+	<td>String</td>
+	<td>13212345687</td>
+	<td>&nbsp;</td>
+</tr>
+<tr>
+	<td>msgRecivePhoneNum</td>
+	<td>短息接收手机的手机号</td>
+	<td>String</td>
+	<td>13212345678</td>
+	<td>&nbsp;</td>
+</tr>
+<tr>
+	<td>msgContent</td>
+	<td>短信的的信息体</td>
+	<td>String</td>
+	<td></td>
+	<td>&nbsp;</td>
+</tr>
+<tr>
+	<td>msgCreateTime</td>
+	<td>短讯息的接收时间以手机时间为准</td>
+	<td>String</td>
+	<td>返回一个 2019年01月12日 12:12:20 格式的时间串</td>
+	<td>&nbsp;</td>
+</tr>
+<tr>
+	<td>msgState</td>
+	<td>信息状态描述</td>
+	<td>int</td>
+	<td>转发状态描述<br>  0：已创建<br>      1：待发送<br>    2：发送成功<br>      3：发送失败<br>      4：失败进入重试<br>      9：发送取消</td>
+	<td>&nbsp;</td>
+</tr>
+<tr>
+	<td>msgSendTime</td>
+	<td>短讯息是否转发送达时间</td>
+	<td>String</td>
+	<td>只用转发成功的短信息才会有值 ， 如2019年01月12日 12:12:20</td>
+	<td>&nbsp;</td>
+</tr>
+</tbody>
+</table>
+<pre><code>{
+    &quot;code&quot;: 200,
+    &quot;msg&quot;: &quot;请求成功&quot;,
+    &quot;msgList&quot;: [
+        {
+            &quot;msgBody&quot;: &quot;短信内容&quot;,
+            &quot;msgCreateTime&quot;: &quot;2019年07月14日 16:04:30&quot;,
+            &quot;msgFrom&quot;: &quot;+8613693325491&quot;,
+            &quot;msgId&quot;: &quot;1563091479897&quot;,
+            &quot;msgRecivePhoneNum&quot;: &quot;&quot;,
+            &quot;msgSendTime&quot;: &quot;&quot;,
+            &quot;msgState&quot;: 3
+        },
+        {
+            &quot;msgBody&quot;: &quot;短信的内容&quot;,
+            &quot;msgCreateTime&quot;: &quot;2019年07月14日 16:16:53&quot;,
+            &quot;msgFrom&quot;: &quot;+8613693325491&quot;,
+            &quot;msgId&quot;: &quot;1563092243614&quot;,
+            &quot;msgRecivePhoneNum&quot;: &quot;&quot;,
+            &quot;msgSendTime&quot;: &quot;&quot;,
+            &quot;msgState&quot;: 3
+        }
+    ]
+}
+</code></pre>
+
+
+</body>
+</html>
+<!-- This document was created with MarkdownPad, the Markdown editor for Windows (http://markdownpad.com) -->
